@@ -7,7 +7,6 @@ public class MoveSC : MonoBehaviour
     public float maxSpeed;
     Rigidbody2D rigid;
     SpriteRenderer spriteRenderer;
-
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
@@ -24,7 +23,7 @@ public class MoveSC : MonoBehaviour
     void FixedUpdate()
     {
         float h = Input.GetAxisRaw("Horizontal");
-        
+
         rigid.AddForce(Vector2.right *h, ForceMode2D.Impulse);
 
         if(rigid.velocity.x > maxSpeed)//Right Max Speed
@@ -33,6 +32,25 @@ public class MoveSC : MonoBehaviour
             rigid.velocity = new Vector2(maxSpeed*(-1), rigid.velocity.y);
         
     }
-
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.tag == "ground")
+        {
+            float colHalfWidth = col.gameObject.transform.lossyScale.x / 2;
+            float colLeftX = col.gameObject.transform.position.x - colHalfWidth;
+            float colRightX = col.gameObject.transform.position.x + colHalfWidth;
+            float playerHalfWidth = transform.lossyScale.x / 2;
+            float playerLeftX = transform.position.x - playerHalfWidth;
+            float playerRightX = transform.position.x + playerHalfWidth;
+            if(playerLeftX<=colRightX-0.1f && playerRightX >= colLeftX+0.1f)
+            {
+                if (transform.position.y > col.gameObject.transform.position.y)
+                {
+                    transform.position = new Vector2(transform.position.x, col.gameObject.transform.position.y + col.gameObject.transform.lossyScale.y / 2 + transform.lossyScale.y / 2);
+                }
+            }
+        }
+    }
+    
 
 }
