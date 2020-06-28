@@ -5,6 +5,7 @@ using UnityEngine;
 public class MoveSC : MonoBehaviour
 {
     public float maxSpeed;
+    public float jumpPower;
     Rigidbody2D rigid;
     SpriteRenderer spriteRenderer;
 
@@ -14,12 +15,19 @@ public class MoveSC : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    //void Update()
-    //{
-    //    if(Input.GetButtonUp("Horizontal")) {
-    //        rigid.velocity = new Vector2(rigid.velocity.normalized.x * 0.5f, rigid.velocity.y);
-    //    }
-    //}
+    void Update()
+    {
+        //jump
+        if(Input.GetButtonDown("Jump"))
+            rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+
+        //move Flip
+        if(Input.GetButton("Horizontal"))
+            spriteRenderer.flipX = Input.GetAxisRaw("Horizontal") == -1;
+        if(Input.GetButtonUp("Horizontal")) 
+            rigid.velocity = new Vector2(rigid.velocity.normalized.x * 0.5f, rigid.velocity.y);
+    }
+
 
     void FixedUpdate()
     {
