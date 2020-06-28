@@ -287,6 +287,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 4
   jumpPower: 16
+  maxJump: 2
 --- !u!1 &162236957
 GameObject:
   m_ObjectHideFlags: 0
@@ -815,7 +816,7 @@ GameObject:
   - component: {fileID: 891186834}
   m_Layer: 0
   m_Name: floorR
-  m_TagString: Untagged
+  m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2003,7 +2004,7 @@ GameObject:
   - component: {fileID: 2042118650}
   m_Layer: 0
   m_Name: tree
-  m_TagString: Untagged
+  m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

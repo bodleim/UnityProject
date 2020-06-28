@@ -6,10 +6,14 @@ public class MoveSC : MonoBehaviour
 {
     public float maxSpeed;
     public float jumpPower;
+    public int maxJump;
+    int jumpsLeft;
     Rigidbody2D rigid;
     SpriteRenderer spriteRenderer;
+    
     void Awake()
     {
+        jumpsLeft = maxJump;
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
@@ -17,8 +21,11 @@ public class MoveSC : MonoBehaviour
     void Update()
     {
         //jump
-        if(Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && jumpsLeft > 0)
+        {
+            jumpsLeft--;
             rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+        }
 
         //move Flip
         if(Input.GetButton("Horizontal"))
@@ -54,6 +61,7 @@ public class MoveSC : MonoBehaviour
             {
                 if (transform.position.y > col.gameObject.transform.position.y)
                 {
+                    jumpsLeft = maxJump;
                     transform.position = new Vector2(transform.position.x, col.gameObject.transform.position.y + col.gameObject.transform.lossyScale.y / 2 + transform.lossyScale.y / 2);
                 }
             }
