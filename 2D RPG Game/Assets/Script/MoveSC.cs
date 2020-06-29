@@ -63,8 +63,18 @@ public class MoveSC : MonoBehaviour
         }
         }
     }
+
+        
+
     void OnCollisionEnter2D(Collision2D col)
     {
+        if(Input.GetButtonDown("x")){
+        if (col.gameObject.name == "house")
+        {
+            Debug.Log("house Touch");
+        }
+        }
+
         if (col.gameObject.tag == "ground")
         {
             float colHalfWidth = col.gameObject.transform.lossyScale.x / 2;
