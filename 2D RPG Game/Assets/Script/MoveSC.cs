@@ -7,6 +7,7 @@ public class MoveSC : MonoBehaviour
     public float maxSpeed;
     public float jumpPower;
     public int maxJump;
+    bool isJumping = false;
     int jumpsLeft;
     Rigidbody2D rigid;
     SpriteRenderer spriteRenderer;
@@ -21,11 +22,15 @@ public class MoveSC : MonoBehaviour
     void Update()
     {
         //jump
-        if (Input.GetButtonDown("Jump") && jumpsLeft > 0)
+        if (Input.GetButtonDown("Jump"))
         {
-            jumpsLeft--;
-            rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+            if(isJumping == false){
+                Debug.Log(isJumping);
+                rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+                isJumping = true;
+                Debug.Log(isJumping);
         }
+    }
 
         //move Flip
         if(Input.GetButton("Horizontal"))
@@ -46,6 +51,17 @@ public class MoveSC : MonoBehaviour
         else if(rigid.velocity.x < maxSpeed*(-1))//Left Max Speed
             rigid.velocity = new Vector2(maxSpeed*(-1), rigid.velocity.y);
         
+        if(rigid.velocity.y < 0){
+        Debug.DrawRay(rigid.position, Vector3.down, new Color(0, 1, 0));
+
+        RaycastHit2D rayHit = Physics2D.Raycast(rigid.position, Vector3.down, 1, LayerMask.GetMask("Platform"));
+
+        if(rayHit.collider != null){
+            isJumping = false;
+            Debug.Log(isJumping);
+            Debug.Log(rayHit.collider.name);
+        }
+        }
     }
     void OnCollisionEnter2D(Collision2D col)
     {
@@ -57,14 +73,14 @@ public class MoveSC : MonoBehaviour
             float playerHalfWidth = transform.lossyScale.x / 2;
             float playerLeftX = transform.position.x - playerHalfWidth;
             float playerRightX = transform.position.x + playerHalfWidth;
-            if(playerLeftX<=colRightX-0.1f && playerRightX >= colLeftX+0.1f)
-            {
-                if (transform.position.y > col.gameObject.transform.position.y)
-                {
-                    jumpsLeft = maxJump;
-                    transform.position = new Vector2(transform.position.x, col.gameObject.transform.position.y + col.gameObject.transform.lossyScale.y / 2 + transform.lossyScale.y / 2);
-                }
-            }
+           // if(playerLeftX<=colRightX-0.1f && playerRightX >= colLeftX+0.1f)
+           // {
+           //     if (transform.position.y > col.gameObject.transform.position.y)
+           //     {
+           //         jumpsLeft = maxJump;
+           //         transform.position = new Vector2(transform.position.x, col.gameObject.transform.position.y + col.gameObject.transform.lossyScale.y / 2 + transform.lossyScale.y / 2);
+           //     }
+           // }
         }
     }
     
