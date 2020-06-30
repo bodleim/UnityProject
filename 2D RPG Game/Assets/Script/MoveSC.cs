@@ -83,14 +83,14 @@ public class MoveSC : MonoBehaviour
             float playerHalfWidth = transform.lossyScale.x / 2;
             float playerLeftX = transform.position.x - playerHalfWidth;
             float playerRightX = transform.position.x + playerHalfWidth;
-           // if(playerLeftX<=colRightX-0.1f && playerRightX >= colLeftX+0.1f)
-           // {
-           //     if (transform.position.y > col.gameObject.transform.position.y)
-           //     {
-           //         jumpsLeft = maxJump;
-           //         transform.position = new Vector2(transform.position.x, col.gameObject.transform.position.y + col.gameObject.transform.lossyScale.y / 2 + transform.lossyScale.y / 2);
-           //     }
-           // }
+           if(playerLeftX<=colRightX-0.1f && playerRightX >= colLeftX+0.1f)
+           {
+               if (transform.position.y > col.gameObject.transform.position.y)
+               {
+                   
+                   transform.position = new Vector2(transform.position.x, col.gameObject.transform.position.y + col.gameObject.transform.lossyScale.y / 2 + transform.lossyScale.y / 2);
+               }
+           }
         }
     }
     
