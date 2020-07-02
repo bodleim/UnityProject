@@ -17,7 +17,7 @@ public class CGScene : MonoBehaviour
         
     }
 
-        public void Click(int scnumber)
+        public void ChangeScene(int scnumber)
     {
         SceneManager.LoadScene(scnumber);
     }
