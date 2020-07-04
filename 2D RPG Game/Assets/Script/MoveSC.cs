@@ -12,7 +12,7 @@ public class MoveSC : MonoBehaviour
     int jumpsLeft;
     Rigidbody2D rigid;
     SpriteRenderer spriteRenderer;
-
+    private List<GameObject> collidingInteractables = new List<GameObject>();
     void Awake()
     {
         jumpsLeft = maxJump;
@@ -39,7 +39,16 @@ public class MoveSC : MonoBehaviour
             spriteRenderer.flipX = Input.GetAxisRaw("Horizontal") == -1;
         if (Input.GetButtonUp("Horizontal"))
             rigid.velocity = new Vector2(rigid.velocity.normalized.x * 0.5f, rigid.velocity.y);
-        
+
+        if (Input.GetKeyDown(KeyCode.X)) //interact
+        {
+            Debug.Log(collidingInteractables.Count);
+            foreach (GameObject obj in collidingInteractables)
+            {
+                obj.GetComponent<Interactable>().Interact();
+            }
+        }
+
     }
 
 
@@ -73,8 +82,8 @@ public class MoveSC : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        
-        
+
+
 
         /*if (col.gameObject.tag == "ground")
         {
@@ -96,17 +105,20 @@ public class MoveSC : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log(other.gameObject.name);
-        if (other.gameObject.name == "house")
+        if (other.gameObject.tag == "interactable")
         {
-            Debug.Log("house Touch");
-        }
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            if (other.gameObject.name == "house")
+            if (!collidingInteractables.Contains(other.gameObject))
             {
-                Debug.Log("key+house Touch");
+                collidingInteractables.Add(other.gameObject);
             }
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "interactable")
+        {
+            collidingInteractables.Remove(other.gameObject);
         }
     }
 
