@@ -7,6 +7,7 @@ public class MoveSC : MonoBehaviour
     public float maxSpeed;
     public float jumpPower;
     public int maxJump;
+    public float houseObject;
     bool isJumping = false;
     int jumpsLeft;
     Rigidbody2D rigid;
