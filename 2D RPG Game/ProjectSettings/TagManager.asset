@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - ground
+  - interactable
   layers:
   - Default
   - TransparentFX
@@ -15,9 +16,9 @@ TagManager:
   - 
   - 
   - Platform
-  - character
-  - mob
-  - building
+  - Mobs
+  - Character
+  - 
   - 
   - 
   - 
