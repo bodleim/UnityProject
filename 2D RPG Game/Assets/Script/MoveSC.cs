@@ -7,6 +7,7 @@ public class MoveSC : MonoBehaviour
     public float maxSpeed;
     public float jumpPower;
     public int maxJump;
+    public float houseObject;
     bool isJumping = false;
     int jumpsLeft;
     Rigidbody2D rigid;
@@ -68,6 +69,7 @@ public class MoveSC : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
+        Debug.Log(col.gameObject.name);
         if(Input.GetButtonDown("x")){
         if (col.gameObject.name == "house")
         {
