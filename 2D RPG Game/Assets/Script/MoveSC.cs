@@ -39,13 +39,22 @@ public class MoveSC : MonoBehaviour
             spriteRenderer.flipX = Input.GetAxisRaw("Horizontal") == -1;
         if (Input.GetButtonUp("Horizontal"))
             rigid.velocity = new Vector2(rigid.velocity.normalized.x * 0.5f, rigid.velocity.y);
-        
-        if (Input.GetKeyDown(KeyCode.X)) //interact
+        KeyCode interactKey = KeyCode.None;
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            interactKey = KeyCode.E;
+        } else if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            interactKey = KeyCode.UpArrow;
+        }
+        if (interactKey!=KeyCode.None) //interact
         {
             Debug.Log(collidingInteractables.Count);
             foreach (GameObject obj in collidingInteractables)
             {
-                obj.GetComponent<Interactable>().Interact();
+                Interactable interactable = obj.GetComponent<Interactable>();
+                if (interactable.interactKey == interactKey)
+                    interactable.Interact();
             }
         }
 
