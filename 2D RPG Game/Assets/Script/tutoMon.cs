@@ -29,7 +29,7 @@ public class tutoMon : MonoBehaviour
         RaycastHit2D rayHit = Physics2D.Raycast(frontVec, Vector3.down, 1, LayerMask.GetMask("Platform"));
 
         if(rayHit.collider == null){
-            Debug.Log("땅 없음 인식.");
+           // Debug.Log("땅 없음 인식.");
             nextMove *= -1;
             //reverse
             CancelInvoke();
@@ -52,4 +52,5 @@ public class tutoMon : MonoBehaviour
         if(nextMove != 0)
             spriteRenderer.flipX = nextMove == 1;
     }
+
 }

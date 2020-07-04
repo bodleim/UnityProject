@@ -39,7 +39,7 @@ public class MoveSC : MonoBehaviour
             spriteRenderer.flipX = Input.GetAxisRaw("Horizontal") == -1;
         if (Input.GetButtonUp("Horizontal"))
             rigid.velocity = new Vector2(rigid.velocity.normalized.x * 0.5f, rigid.velocity.y);
-
+        
         if (Input.GetKeyDown(KeyCode.X)) //interact
         {
             Debug.Log(collidingInteractables.Count);
@@ -105,7 +105,8 @@ public class MoveSC : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "interactable")
+        Debug.Log(other.gameObject.name);
+        if (other.gameObject.GetComponent<Interactable>()!=null)
         {
             if (!collidingInteractables.Contains(other.gameObject))
             {
@@ -116,7 +117,7 @@ public class MoveSC : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.tag == "interactable")
+        if (other.gameObject.GetComponent<Interactable>() != null)
         {
             collidingInteractables.Remove(other.gameObject);
         }
