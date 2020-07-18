@@ -7,6 +7,10 @@ TagManager:
   - ground
   - interactable
   - Item Database
+  - Enemy
+  - downTile
+  - jumpFake
+  - jumpTile
   layers:
   - Default
   - TransparentFX
@@ -19,9 +23,9 @@ TagManager:
   - Platform
   - Mobs
   - Character
-  - 
-  - 
-  - 
+  - Enemy
+  - Player
+  - PlayerDameged
   - 
   - 
   - 

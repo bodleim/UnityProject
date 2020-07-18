@@ -10,9 +10,27 @@ public class MoveSC : MonoBehaviour
     public float houseObject;
     bool isJumping = false;
     int jumpsLeft;
+    int nowStage;
+
+    //Mobile key set
+    public bool LeftValue;
+    public bool RightValue;
+    public bool JumpValue;
+    public bool EnterValue;
+    bool left_Down;
+    bool right_Down;
+    bool left_Up;
+    bool right_Up;
     Rigidbody2D rigid;
     SpriteRenderer spriteRenderer;
     private List<GameObject> collidingInteractables = new List<GameObject>();
+
+
+    void Start()
+    {
+        //ButtonManager bm = GameObject.FindGameObjectWithTag("")
+    }
+
     void Awake()
     {
         jumpsLeft = maxJump;
@@ -20,13 +38,16 @@ public class MoveSC : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
+    
+
     void Update()
     {
         //jump
-        if (Input.GetButtonDown("Jump"))
+        if (JumpValue == true||Input.GetButton("Jump"))
         {
             if (isJumping == false)
             {
+                JumpValue = false;
                 Debug.Log(isJumping);
                 rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
                 isJumping = true;
@@ -38,7 +59,9 @@ public class MoveSC : MonoBehaviour
         if (Input.GetButton("Horizontal"))
             spriteRenderer.flipX = Input.GetAxisRaw("Horizontal") == -1;
         if (Input.GetButtonUp("Horizontal"))
-            rigid.velocity = new Vector2(rigid.velocity.normalized.x * 0.5f, rigid.velocity.y);
+
+        
+        rigid.velocity = new Vector2(rigid.velocity.normalized.x * 0.5f, rigid.velocity.y);
         KeyCode interactKey = KeyCode.None;
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -58,14 +81,23 @@ public class MoveSC : MonoBehaviour
             }
         }
 
+            foreach (GameObject obj in collidingInteractables)
+            {
+                Interactable interactable = obj.GetComponent<Interactable>();
+                if (EnterValue == true)
+                    EnterValue = false;
+                    interactable.Interact();
+            }
+        
+
     }
 
 
     void FixedUpdate()
     {
         float h = Input.GetAxisRaw("Horizontal");
-
-        rigid.AddForce(Vector2.right * h, ForceMode2D.Impulse);
+        rigid.AddForce(Vector2.right * h*5 , ForceMode2D.Impulse);
+        
 
         if (rigid.velocity.x > maxSpeed)//Right Max Speed
             rigid.velocity = new Vector2(maxSpeed, rigid.velocity.y);
@@ -85,35 +117,62 @@ public class MoveSC : MonoBehaviour
                 Debug.Log(rayHit.collider.name);
             }
         }
+
+
+        if(LeftValue == true){
+            rigid.AddForce(Vector2.right *-1 , ForceMode2D.Impulse);
+        }
+        if(RightValue == true){
+            rigid.AddForce(Vector2.right , ForceMode2D.Impulse);
+        }
     }
 
 
 
     void OnCollisionEnter2D(Collision2D col)
     {
+        if(col.gameObject.tag == "jumpTile"){
+            rigid.AddForce(Vector2.up * 40, ForceMode2D.Impulse);
+        }
+        if(col.gameObject.tag == "jumpFake"){
+            rigid.AddForce(Vector2.up * 80, ForceMode2D.Impulse);
+        }
 
+        if(col.gameObject.tag == "downTile"){
+            Destroy(col.gameObject);
+        }
 
-
-        /*if (col.gameObject.tag == "ground")
-        {
-            float colHalfWidth = col.gameObject.transform.lossyScale.x / 2;
-            float colLeftX = col.gameObject.transform.position.x - colHalfWidth;
-            float colRightX = col.gameObject.transform.position.x + colHalfWidth;
-            float playerHalfWidth = transform.lossyScale.x / 2;
-            float playerLeftX = transform.position.x - playerHalfWidth;
-            float playerRightX = transform.position.x + playerHalfWidth;
-            if (playerLeftX <= colRightX - 0.1f && playerRightX >= colLeftX + 0.1f)
-            {
-                if (transform.position.y > col.gameObject.transform.position.y)
-                {
-
-                    transform.position = new Vector2(transform.position.x, col.gameObject.transform.position.y + col.gameObject.transform.lossyScale.y / 2 + transform.lossyScale.y / 2);
-                }
-            }
-        }*/
+        if(col.gameObject.tag == "Enemy"){
+            OnDamaged(col.transform.position);
+        }
     }
+
+    void OnDamaged(Vector2 targetPos)
+    {
+        //Change Layer
+        gameObject.layer = 13;
+        //View Alpha
+        spriteRenderer.color = new Color(1,1,1,0.4f);
+
+        int dirc = transform.position.x-targetPos.x > 0 ? 1 : -1;
+        rigid.AddForce(new Vector2(dirc,1)* 7, ForceMode2D.Impulse);
+
+        //무적해제
+        Invoke("OffDamaged", 1.5f);
+    }
+
+    void OffDamaged()
+    {
+        gameObject.layer = 12;
+        spriteRenderer.color = new Color(1,1,1,1);
+    }
+
+
+
     void OnTriggerEnter2D(Collider2D other)
     {
+        
+
         Debug.Log(other.gameObject.name);
         if (other.gameObject.GetComponent<Interactable>()!=null)
         {
@@ -131,5 +190,36 @@ public class MoveSC : MonoBehaviour
             collidingInteractables.Remove(other.gameObject);
         }
     }
+    
+    
+/*
+    public void ButtonDown(string type)
+    {
+        switch (type)
+        {
+            case "L":
+                leftValue = 1;
+                break;
+            case "R":
+                rightValue = 1;
+                break;
 
+        }
+
+    }
+    
+    public void ButtonUp(string type)
+    {
+        switch (type)
+        {
+            case "L":
+                leftValue = 0;
+                break;
+            case "R":
+                rightValue = 0;
+                break;
+
+        }
+    }
+*/
 }
